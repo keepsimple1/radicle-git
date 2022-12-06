@@ -26,7 +26,7 @@
 
 pub extern crate git_ref_format;
 
-pub extern crate radicle_git_ext;
+extern crate radicle_git_ext as git_ext;
 
 pub mod diff;
 pub mod file_system;
