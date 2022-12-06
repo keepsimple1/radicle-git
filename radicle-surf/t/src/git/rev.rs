@@ -1,7 +1,8 @@
 use std::str::FromStr;
 
 use git_ref_format::{name::component, refname};
-use radicle_surf::git::{Branch, Error, Oid, Repository};
+use radicle_git_ext::Oid;
+use radicle_surf::git::{Branch, Error, Repository};
 
 use super::GIT_PLATINUM;
 

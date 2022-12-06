@@ -17,7 +17,7 @@
 
 use std::{convert::TryFrom, str};
 
-use git_ext::Oid;
+use radicle_git_ext::Oid;
 use thiserror::Error;
 
 #[cfg(feature = "serde")]

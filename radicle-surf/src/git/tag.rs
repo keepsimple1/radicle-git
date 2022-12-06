@@ -1,7 +1,7 @@
 use std::{convert::TryFrom, str};
 
-use git_ext::Oid;
 use git_ref_format::{component, lit, Qualified, RefStr, RefString};
+use radicle_git_ext::Oid;
 
 use crate::git::{refstr_join, Author};
 

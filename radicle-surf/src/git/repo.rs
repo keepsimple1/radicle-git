@@ -28,7 +28,10 @@ use thiserror::Error;
 
 use crate::{
     diff::{self, *},
-    file_system::{directory::FileContent, Directory},
+    file_system::{
+        directory::{self, File, FileContent},
+        Directory,
+    },
     git::{
         commit,
         glob,
@@ -65,6 +68,8 @@ pub enum Error {
     #[error(transparent)]
     Diff(#[from] diff::git::error::Diff),
     /// A wrapper around the generic [`git2::Error`].
+    #[error(transparent)]
+    Directory(#[from] directory::error::Directory),
     #[error(transparent)]
     Git(#[from] git2::Error),
     #[error(transparent)]
@@ -250,6 +255,28 @@ impl Repository {
         let git2_commit = self.inner.find_commit((commit.id).into())?;
         let tree = git2_commit.as_object().peel_to_tree()?;
         Ok(Directory::root(tree.id().into()))
+    }
+
+    /// Returns a [Directory] for `path` in `commit`.
+    pub fn directory<C: ToCommit>(&self, commit: C, path: &str) -> Result<Directory, Error> {
+        let path = std::path::Path::new(path);
+        let root = self.root_dir(commit)?;
+        let sub_dir = root.find_directory(&path, self)?;
+        match sub_dir {
+            Some(d) => Ok(d),
+            None => Err(Error::PathNotFound(path.to_path_buf())),
+        }
+    }
+
+    /// Returns a [File] for `path` in `commit`.
+    pub fn file<C: ToCommit>(&self, commit: C, path: &str) -> Result<File, Error> {
+        let path = std::path::Path::new(path);
+        let root = self.root_dir(commit)?;
+        let f = root.find_file(&path, self)?;
+        match f {
+            Some(file) => Ok(file),
+            None => Err(Error::PathNotFound(path.to_path_buf())),
+        }
     }
 
     /// Returns the last commit, if exists, for a `path` in the history of

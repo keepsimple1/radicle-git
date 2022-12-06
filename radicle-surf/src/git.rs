@@ -68,7 +68,7 @@ use std::{convert::Infallible, str::FromStr};
 // Re-export git2 as sub-module
 pub use git2::{self, Error as Git2Error, Time};
 use git_ref_format::{name::Components, Component, Qualified, RefString};
-pub use radicle_git_ext::Oid;
+use radicle_git_ext::Oid;
 
 mod repo;
 pub use repo::{Error, Repository};

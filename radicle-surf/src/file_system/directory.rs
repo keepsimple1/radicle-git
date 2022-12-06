@@ -71,6 +71,7 @@ pub mod error {
 /// The [`FileContent`] of a file can be retrieved via
 /// [`File::content`].
 #[derive(Clone, PartialEq, Eq, Debug)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct File {
     /// The name of the file.
     name: String,
@@ -195,6 +196,7 @@ impl Iterator for Entries {
 
 /// An `Entry` is either a [`File`] entry or a [`Directory`] entry.
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum Entry {
     /// A file entry within a [`Directory`].
     File(File),
@@ -277,6 +279,7 @@ impl Entry {
 ///
 /// [git-tree]: https://git-scm.com/book/en/v2/Git-Internals-Git-Objects
 #[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Directory {
     /// The name of the directoy.
     name: String,
